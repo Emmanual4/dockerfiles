@@ -1,0 +1,32 @@
+FROM emmanual4/java:latest
+MAINTAINER emmanual
+
+RUN apt-get -y install wget
+RUN wget --quiet --no-cookies https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.12/bin/apache-tomcat-9.0.12.tar.gz -O /tmp/tomcat.tgz && \
+tar xzvf /tmp/tomcat.tgz -C /tmp && \
+cp -Rf /tmp/apache-tomcat-9.0.12 /home/tomcat1 && \
+cp -Rf /tmp/apache-tomcat-9.0.12 /home/tomcat2 && \
+cp -Rf /tmp/apache-tomcat-9.0.12 /home/tomcat3 && \
+cp -Rf /tmp/apache-tomcat-9.0.12 /home/tomcat4 && \
+sed -i -e 's/\(<Server[ ]*\)\(port=\"[0-9]*\"\)\([ ]*shutdown=\"SH.*\)/\1port="8010"\3/'  /home/tomcat1/conf/server.xml && \
+sed -i -e 's/\(<Server[ ]*\)\(port=\"[0-9]*\"\)\([ ]*shutdown=\"SH.*\)/\1port="8011"\3/'  /home/tomcat2/conf/server.xml && \
+sed -i -e 's/\(<Server[ ]*\)\(port=\"[0-9]*\"\)\([ ]*shutdown=\"SH.*\)/\1port="8012"\3/'  /home/tomcat3/conf/server.xml && \
+sed -i -e 's/\(<Server[ ]*\)\(port=\"[0-9]*\"\)\([ ]*shutdown=\"SH.*\)/\1port="8014"\3/'  /home/tomcat4/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"org.*\)/\1port="8044"\3/'  /home/tomcat1/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"org.*\)/\1port="8045"\3/'  /home/tomcat2/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"org.*\)/\1port="8046"\3/'  /home/tomcat3/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"org.*\)/\1port="8047"\3/'  /home/tomcat4/conf/server.xml && \	
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"HTTP.*\)/\1port="8081"\3/'  /home/tomcat1/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"HTTP.*\)/\1port="8082"\3/'  /home/tomcat2/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"HTTP.*\)/\1port="8083"\3/'  /home/tomcat3/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"HTTP.*\)/\1port="8084"\3/'  /home/tomcat4/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"AJP.*\)/\1port="8015"\3/'  /home/tomcat1/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"AJP.*\)/\1port="8016"\3/'  /home/tomcat2/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"AJP.*\)/\1port="8017"\3/'  /home/tomcat3/conf/server.xml && \
+sed -i -e 's/\(<Connector[ ]*\)\(port=\"[0-9]*\"\)\([ ]*protocol=\"AJP.*\)/\1port="8018"\3/'  /home/tomcat4/conf/server.xml 
+
+EXPOSE 8081 8082 8083 8084
+
+# Launch Tomcat
+CMD ["/home/tomcat1/bin/catalina.sh","/home/tomcat2/bin/catalina.sh","/home/tomcat3/bin/catalina.sh","/home/tomcat4/bin/catalina.sh","run"]
+
