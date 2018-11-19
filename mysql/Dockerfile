@@ -1,25 +1,16 @@
-From ubuntu:latest
-
-ENV MYSQL_USER=mysql \
-    MYSQL_VERSION=5.7.21 \
-    MYSQL_DATA_DIR=/var/lib/mysql \
-    MYSQL_RUN_DIR=/run/mysqld \
-    MYSQL_LOG_DIR=/var/log/mysql
+FROM ubuntu:16.04
 
 RUN apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server=${MYSQL_VERSION}* \
- && rm -rf ${MYSQL_DATA_DIR} \
- && rm -rf /var/lib/apt/lists/*
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server \
+ && sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mysql.conf.d/mysqld.cnf \
+ && mkdir /var/run/mysqld \
+ && chown -R mysql:mysql /var/run/mysqld
 
-COPY entrypoint.sh /sbin/entrypoint.sh
+VOLUME ["/var/lib/mysql"]
 
-RUN chmod 755 /sbin/entrypoint.sh
+EXPOSE 3306
 
-EXPOSE 3306/tcp
-
-ENTRYPOINT ["/sbin/entrypoint.sh"]
-
-CMD ["/usr/bin/mysqld_safe"]
+CMD ["mysqld_safe"]
 
 
 
